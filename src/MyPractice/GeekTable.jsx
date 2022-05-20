@@ -29,7 +29,7 @@ function JsonDataDisplay(){
 			<table class="table table-striped">
 				<thead>
 					<tr>
-					<td>Date</td>
+					<th>Date</th>
 					<th>State</th>
 					<th>Wounded</th>
 					<th>City</th>
