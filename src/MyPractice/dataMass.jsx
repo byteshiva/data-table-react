@@ -39,8 +39,9 @@ function Mass() {
     //  console.log(sum);
       
     let wounded = 0, killed = 0;
-    const loopData = mass.map((data, index) => {
+    const loopData = mass.map((data, index, massarray) => {
         let datenow = moment(data.date).format('MM/DD/YYYY');
+        let arrlength  = massarray.length;
         const mapurldata = googleurl + data.city + ",+" + data.state + ",+USA";
         const sources = data.sources.map((source, index) => {
             return (<span key={'a'+index + 1}>
@@ -48,14 +49,23 @@ function Mass() {
             </span>)
         });
 
+
+        
+        // Concatenate Shooters Names
+        var ShooterNames=data.names.reduce(function (accumulator,currentValue) {  
+            return accumulator+currentValue;  
+        }); 
+
+
         killed = killed + parseInt(data.killed, 10);
         wounded = wounded + parseInt(data.wounded, 10);
     
         return (
             <tr key={index+1}>
+                <td><b>{arrlength-index}</b></td>
                 <td>{datenow}</td>
-                <td>{stateusa[data.state]}</td>
-                <td>{data.city}</td>
+                <td>{data.city}, {stateusa[data.state]}</td>
+                <td>{ShooterNames}</td>
                 <td>{data.killed}</td>
                 <td>{data.wounded}</td>
                 <td>{sources}</td>
@@ -72,9 +82,10 @@ function Mass() {
             <table table table-striped >
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Date</th>
-                        <th>State</th>
-                        <th>City</th>
+                        <th>Location</th>
+                        <th>Shooters</th>
                         <th>Killed</th>
                         <th>Wounded</th>
                         <th>Sources</th>
