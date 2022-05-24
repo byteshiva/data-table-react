@@ -3,11 +3,17 @@ import {useState, useEffect}   from "react";
 import StateUSA_ACR from './states_hash.json'
 import moment from "moment";
 
+
+
 function Mass() {
     const [mass, setMass] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [stateusa, setStateusa] = useState([]);
+
+    const googleurl = "https://www.google.com/maps/place/";
+
+    // Cleveland,+OH,+USA/
     
 
     const handleMass = (mass) => {
@@ -29,6 +35,7 @@ function Mass() {
    
     const loopData = mass.map((data, index) => {
         let datenow = moment(data.date).format('MM/DD/YYYY');
+        const mapurldata = googleurl + data.city + ",+" + data.state + ",+USA";
         const sources = data.sources.map((source, index) => {
             return (<span key={'a'+index + 1}>
                 <span>  <a href={source} id={index + 1} >{index + 1}</a></span>
@@ -41,7 +48,8 @@ function Mass() {
                 <td>{stateusa[data.state]}</td>
                 <td>{data.city}</td>
                 <td>{data.killed}</td>
-                <td>{sources}</td>    
+                <td>{sources}</td>
+                <td><a href={mapurldata} target="_blank" rel="noreferrer">{stateusa[data.state]} - {data.city}</a></td>        
             </tr>
         )
     })
@@ -58,6 +66,7 @@ function Mass() {
                         <th>City</th>
                         <th>Killed</th>
                         <th>Sources</th>
+                        <th>Map</th>
                     </tr>
                 </thead>
                 <tbody>
