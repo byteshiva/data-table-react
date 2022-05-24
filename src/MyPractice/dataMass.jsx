@@ -3,8 +3,6 @@ import {useState, useEffect}   from "react";
 import StateUSA_ACR from './states_hash.json'
 import moment from "moment";
 
-
-
 function Mass() {
     const [mass, setMass] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -32,7 +30,15 @@ function Mass() {
     useEffect(() => {
         handleMass();
     });
-   
+
+
+    // const sum = mass.reduce((result, item) =>{
+    //     return (result.killed !== 'undefined')?(parseInt(result.killed, 10) + item):0;
+    //   }, 0);
+
+    //  console.log(sum);
+      
+    let wounded = 0, killed = 0;
     const loopData = mass.map((data, index) => {
         let datenow = moment(data.date).format('MM/DD/YYYY');
         const mapurldata = googleurl + data.city + ",+" + data.state + ",+USA";
@@ -42,12 +48,16 @@ function Mass() {
             </span>)
         });
 
+        killed = killed + parseInt(data.killed, 10);
+        wounded = wounded + parseInt(data.wounded, 10);
+    
         return (
             <tr key={index+1}>
                 <td>{datenow}</td>
                 <td>{stateusa[data.state]}</td>
                 <td>{data.city}</td>
                 <td>{data.killed}</td>
+                <td>{data.wounded}</td>
                 <td>{sources}</td>
                 <td><a href={mapurldata} target="_blank" rel="noreferrer">{stateusa[data.state]} - {data.city}</a></td>        
             </tr>
@@ -56,6 +66,7 @@ function Mass() {
 
     return ( 
         <div className="container">
+        <div><h2>Total Killed: {killed}, and wounded: {wounded}</h2></div>
         {loading && <div>Loading data please wait..</div>}
         <div> 
             <table table table-striped >
@@ -65,6 +76,7 @@ function Mass() {
                         <th>State</th>
                         <th>City</th>
                         <th>Killed</th>
+                        <th>Wounded</th>
                         <th>Sources</th>
                         <th>Map</th>
                     </tr>
