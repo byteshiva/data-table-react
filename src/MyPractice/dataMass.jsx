@@ -1,12 +1,12 @@
 import axios from "axios";
-import {useState, useEffect}   from "react";
+import {useState, useEffect, useCallback}   from "react";
 import StateUSA_ACR from './states_hash.json'
 import moment from "moment";
 
 function Mass() {
     const [mass, setMass] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
+    // const [error, setError] = useState(false);
     const [stateusa, setStateusa] = useState([]);
 
     const googleurl = "https://www.google.com/maps/place/";
@@ -14,7 +14,8 @@ function Mass() {
     // Cleveland,+OH,+USA/
     
 
-    const handleMass = (mass) => {
+    const handleMass = useCallback((mass) => {
+        // https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json
         axios.get("https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json")
         .then(response => {
             setMass(response.data);
@@ -22,14 +23,13 @@ function Mass() {
             setLoading(false);
         }).catch(err => {
             console.log(err);
-            setError(error);
+            // setError(error);
         });
-
-    }
+    },[]);
 
     useEffect(() => {
         handleMass();
-    }, []);
+    },[handleMass]);
 
 
     // const sum = mass.reduce((result, item) =>{
@@ -79,7 +79,7 @@ function Mass() {
         <div><h2>Total Killed: {killed}, and wounded: {wounded}</h2></div>
         {loading && <div>Loading data please wait..</div>}
         <div> 
-            <table table table-striped >
+            <table>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -97,7 +97,7 @@ function Mass() {
                 </tbody>
             </table>
             </div>
-        <button onClick={handleMass}>Get Data</button>
+        {/* <button onClick={handleMass}>Get Data</button> */}
     </div>
     )
 
