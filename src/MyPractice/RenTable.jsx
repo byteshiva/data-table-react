@@ -10,49 +10,14 @@ import moment from "moment";
 
 function RenTab() {
   const [mass, setMass] = useState([]);
-  const [arrLen, setArrLen] = useState(0);
+
   const [sumkilled, setSumKilled] = useState(0);
   const [sumwounded, setSumWounded] = useState(0);
 
 
-
-
-  // const [loading, setLoading] = useState(true);
-  // const [error, setError] = useState(false);
-  // const [stateusa, setStateusa] = useState([]);
-
-  // const handleMass = () => {
-  //     axios.get("https://raw.githubusercontent.com/byteshiva/data-table-react/main/src/MyPractice/2022-data.json")
-  //     .then(response => {
-  //         setMass(response.data);
-  //         setStateusa(StateUSA_ACR);
-  //         setLoading(false);
-
-  //     }).catch(err => {
-  //         console.log(err);
-  //         setError(error);
-  //     });
-  // }; 
-
-  // async function fetchData() {
-  //   try {
-  //     const response = await fetch('https://raw.githubusercontent.com/byteshiva/data-table-react/main/src/MyPractice/2022-data.json');
-  //     return await response.json();
-  //     // setMass(cats);
-  //   } catch(e) {
-  //     console.error(e);
-  //   }
-  // }
-  // const [mass, setMass] = React.useState({ nodes: [] });
-
-
-  const ShooterNames = (data) => data.reduce(function (accumulator,currentValue) {  
+   const ShooterNames = (data) => data.reduce(function (accumulator,currentValue) {  
     return accumulator+currentValue;  
   }); 
-
-  const getArrlen = (index) => {
-    return arrLen - index;
-  }
 
   function extractColumn(arr, column) {
     function reduction(previousValue, currentValue) {
@@ -91,7 +56,7 @@ function RenTab() {
     setSumWounded(woundedSum);
     
     setMass(result.data);
-    setArrLen(result.data.length);
+
   }, []);
 
   useEffect(() => {
