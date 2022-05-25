@@ -29,7 +29,7 @@ function Mass() {
 
     useEffect(() => {
         handleMass();
-    });
+    }, []);
 
 
     // const sum = mass.reduce((result, item) =>{
