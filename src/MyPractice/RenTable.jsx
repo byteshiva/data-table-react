@@ -4,18 +4,14 @@ import {useState, useEffect}   from "react";
 // import Data from './2022-data.json'
 import axios from "axios";
 import StateUSA_ACR from './states_hash.json'
-
 import moment from "moment";
-
 
 function RenTab() {
   const [mass, setMass] = useState([]);
-
   const [sumkilled, setSumKilled] = useState(0);
   const [sumwounded, setSumWounded] = useState(0);
 
-
-   const ShooterNames = (data) => data.reduce(function (accumulator,currentValue) {  
+  const ShooterNames = (data) => data.reduce(function (accumulator,currentValue) {  
     return accumulator+currentValue;  
   }); 
 
@@ -24,14 +20,12 @@ function RenTab() {
       previousValue.push(currentValue[column]);
       return previousValue;
     }
-  
+ 
     return arr.reduce(reduction, []);
   }
 
   const convertToInt = (arr) => arr.map((x) => parseInt(x, 10));
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
-
-
 
   const fetchData = useCallback(async () => {
     // const url = "https://raw.githubusercontent.com/byteshiva/data-table-react/main/src/MyPractice/2022-data.json";
@@ -39,24 +33,21 @@ function RenTab() {
     const result = await axios.get(url);
     console.log("result.data",result.data);
 
+    // add new element to array of objects
+    (result.data).forEach(element => element.sum = (result.data).length);
+
     const killedArr = extractColumn(result.data, 'killed');
     const woundedArr = extractColumn(result.data, 'wounded');
     
     var killedIntArr = convertToInt(killedArr);
     var woundedIntArr = convertToInt(woundedArr);
 
-
     let killedSum = sumOfAllNum(killedIntArr);
     let woundedSum = sumOfAllNum(woundedIntArr);
 
-    console.log(killedSum);
-    console.log(woundedSum);
-
     setSumKilled(killedSum);
     setSumWounded(woundedSum);
-    
     setMass(result.data);
-
   }, []);
 
   useEffect(() => {
@@ -72,7 +63,7 @@ function RenTab() {
             () => [
                     { 
                         Header: '#',
-                        accessor: (row, index) => {return index + 1;},
+                        accessor: (row, index) => {return (row.sum - index)},
                     },
                     {
                         Header: 'Date',
