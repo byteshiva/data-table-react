@@ -12,8 +12,6 @@ function Mass() {
     const googleurl = "https://www.google.com/maps/place/";
 
     // Cleveland,+OH,+USA/
-    
-
     const handleMass = useCallback((mass) => {
         // https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json
         axios.get("https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json")
@@ -31,13 +29,7 @@ function Mass() {
         handleMass();
     },[handleMass]);
 
-
-    // const sum = mass.reduce((result, item) =>{
-    //     return (result.killed !== 'undefined')?(parseInt(result.killed, 10) + item):0;
-    //   }, 0);
-
-    //  console.log(sum);
-      
+   
     let wounded = 0, killed = 0;
     const loopData = mass.map((data, index, massarray) => {
         let datenow = moment(data.date).format('MM/DD/YYYY');
