@@ -11,6 +11,8 @@ function RenTab() {
   const [mass, setMass] = useState([]);
   const [sumkilled, setSumKilled] = useState(0);
   const [sumwounded, setSumWounded] = useState(0);
+  const [Loading , setLoading] = useState(true);
+
 
   const ShooterNames = (data) => data.reduce(function (accumulator,currentValue) {  
     return accumulator+currentValue;  
@@ -49,6 +51,7 @@ function RenTab() {
     setSumKilled(killedSum);
     setSumWounded(woundedSum);
     setMass(result.data);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -144,8 +147,10 @@ function RenTab() {
         
           return (
             <div>
-            <div><h2>Total Killed: {sumkilled} and wounded: {sumwounded}</h2></div>
+            {Loading && <div><h4>Loading data, Please wait...</h4></div>}
 
+            {!Loading && <div>   
+            <div><h2>Total Killed: {sumkilled} and wounded: {sumwounded}</h2></div> 
             <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
               <thead>
                 {headerGroups.map(headerGroup => (
@@ -235,6 +240,9 @@ function RenTab() {
               ))}
             </select>
           </div>
+                
+          </div> }
+
             </div>
           )
     }
