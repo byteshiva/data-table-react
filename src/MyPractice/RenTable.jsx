@@ -102,7 +102,7 @@ function RenTab() {
                       accessor: row => {
                         const googleurl = "https://www.google.com/maps/place/";
                         const mapurldata = googleurl + row.city + ",+" + row.state + ",+USA";
-                        return (<a href={mapurldata} target="_blank" rel="noreferrer">{StateUSA_ACR[row.state]} - {row.city}</a>)
+                        return (<a href={mapurldata} target="_blank" rel="noreferrer">{row.city} - {StateUSA_ACR[row.state]}</a>)
                       }
                     }
                 ],
