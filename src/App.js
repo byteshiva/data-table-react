@@ -8,14 +8,14 @@ import './App.css';
 // import Repeater from './components/Links'
 // import HeaderLinks from './components/HeaderLinks';
 import Navbar from './components/Navbar';
-import { BrowserRouter as Router, Routes, Route, Redirect, Navigate } from 'react-router-dom';
-import Home from './pages/Home';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+// import Home from './pages/Home';
 import Products from './pages/Products';
 import Reports from './pages/Reports';
 import Teams from './pages/Teams';
 import Support from './pages/Support';
 import Messages from './pages/Messages';
-import Main from './components/Main';
+// import Main from './components/Main';
 import { useState } from 'react';
 import NoMatch from './pages/NoMatch';
 import { IdGuardWrapper } from './pages/IdGuardWrapper';
@@ -28,7 +28,7 @@ import { IdGuardWrapper } from './pages/IdGuardWrapper';
 
 function App() {
 const [isUserAuthenticated,SetIsUserAuthenticated] = useState(false);
-
+SetIsUserAuthenticated(!isUserAuthenticated);
 return (
 	<>
 		<Router>

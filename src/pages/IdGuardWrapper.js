@@ -4,11 +4,8 @@ import Main from '../components/Main';
 
 import {YearListData } from "../components/YearListData";
 import NoMatch from './NoMatch';
-import Support from './Support';
+// import Support from './Support';
 
-function hasNumber(myString) {
-    return /\d/.test(myString);
-}
 
   
 export const IdGuardWrapper = () => {
