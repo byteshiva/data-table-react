@@ -27,14 +27,14 @@ import { IdGuardWrapper } from './pages/IdGuardWrapper';
 
 
 function App() {
-const [isUserAuthenticated,SetIsUserAuthenticated] = useState(false);
-SetIsUserAuthenticated(!isUserAuthenticated);
+// const [isUserAuthenticated,SetIsUserAuthenticated] = useState(false);
+// SetIsUserAuthenticated(!isUserAuthenticated);
 return (
 	<>
 		<Router>
 			<Navbar />
 			<Routes>
-				<Route
+				{/* <Route
 					exact
 					path="/"
 					render={() => {
@@ -44,7 +44,9 @@ return (
 							<Navigate to="/table/2022"> </Navigate>
 						)
 					}}
-				/>
+				/> */}
+				<Route exact path="/" element={<Navigate to="/table/2022"> </Navigate>} />
+
 				  <Route
 						path='table/:id'
 						element={(
