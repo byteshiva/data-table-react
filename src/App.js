@@ -4,29 +4,67 @@ import './App.css';
 // import MassData from './MyPractice/MassData'
 // import Mass from './MyPractice/dataMass';
 // import { CoinFlip5} from './MyPractice/CoinFlip';
-import RenTable from './MyPractice/RenTable';
-// import FooterSpecial from './components/Footer';
+
+// import Repeater from './components/Links'
+// import HeaderLinks from './components/HeaderLinks';
+import Navbar from './components/Navbar';
+import { BrowserRouter as Router, Routes, Route, Redirect, Navigate } from 'react-router-dom';
+import Home from './pages/Home';
+import Products from './pages/Products';
+import Reports from './pages/Reports';
+import Teams from './pages/Teams';
+import Support from './pages/Support';
+import Messages from './pages/Messages';
+import Main from './components/Main';
+import { useState } from 'react';
+import NoMatch from './pages/NoMatch';
+import { IdGuardWrapper } from './pages/IdGuardWrapper';
+
+// import Footer from './components/FooterFirst';
 // import Button from './components/Button'
-
-
 // const Header = () => <header>header</header>;
-
 // const Footer = () => <footer>footer</footer>;
 
 
 function App() {
-return (
-	<div className="App">
-		{/* <Header />
-		<Button bg="green"> Click </Button>
-		<Button bg="yellow"> Click </Button> */}
-		<h1>Mass Shooting USA!!!</h1>
-		{/* <Mass /> */}
+const [isUserAuthenticated,SetIsUserAuthenticated] = useState(false);
 
-		<RenTable /> 
+return (
+	<>
+		<Router>
+			<Navbar />
+			<Routes>
+				<Route
+					exact
+					path="/"
+					render={() => {
+						return (
+							isUserAuthenticated ?
+							<Navigate to="/support"></Navigate> :
+							<Navigate to="/table/2022"> </Navigate>
+						)
+					}}
+				/>
+				  <Route
+						path='table/:id'
+						element={(
+						<IdGuardWrapper> 
+						</IdGuardWrapper>
+						)}
+  				/>
+
+				<Route path="/products" element={<Products />} />
+				<Route path="/reports" element={<Reports />} />
+				{/* <Route path="/table/:id" element={ <Main />} /> */}
+				<Route path="/teams" element={<Teams/>} />
+				<Route path="/support" element={<Support />} />
+				<Route path="/Messages" element={<Messages />} />
+				<Route path="*" element={<NoMatch />} />
+
+			</Routes>
+		</Router>
 		{/* <Footer /> */}
-	
-	</div>
+	</>
 );
 }
 
