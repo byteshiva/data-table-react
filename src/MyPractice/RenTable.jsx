@@ -1,31 +1,15 @@
 import React, { useCallback } from "react";
 import { useTable, usePagination } from 'react-table';
 import { useState, useEffect } from "react";
-// import Data from './2022-data.json'
 import axios from "axios";
 import StateUSA_ACR from './states_hash.json'
 import moment from "moment";
 import {useParams} from "react-router-dom";
 
 
-// import Button from '../components/Button';
-// import '../styles/tableOnly.css';
-
-
-// function useForceUpdate() {
-//   let [value, setState] = useState(true);
-//   return () => setState(!value);
-// }
-
 function RenTab(props) {
-
-  // let forceUpdate = useForceUpdate();
-
   const { id } = useParams();
-
-
   const defaultURL = "https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/"+id+"-data.json";
-
 
   // const MassURL = props.URL || "https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json";
   const MassURL = props.URL || defaultURL;
@@ -53,7 +37,6 @@ function RenTab(props) {
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
 
   const fetchData  = useCallback(async () => {
-    // const url = "https://raw.githubusercontent.com/byteshiva/data-table-react/main/src/MyPractice/2022-data.json";
     let url = MassURL;
     const result = await axios.get(url);
     console.log("result.data", result.data);
@@ -136,15 +119,6 @@ function RenTab(props) {
     ],
     []
   );
-
-  // const {
-  //     getTableProps,
-  //     getTableBodyProps,
-  //     headerGroups,
-  //     rows,
-  //     prepareRow,
-  //   } = useTable({ columns, data });
-
 
   const {
     getTableProps,
@@ -280,4 +254,3 @@ function RenTab(props) {
 
 
 export default RenTab;
-
