@@ -37,6 +37,7 @@ function RenTab(props) {
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
 
   const fetchData  = useCallback(async () => {
+    setLoading(true);
     let url = MassURL;
     const result = await axios.get(url);
     console.log("result.data", result.data);
