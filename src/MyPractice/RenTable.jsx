@@ -73,6 +73,8 @@ function RenTab(props) {
       fetchData();
       // Clean up component
       
+    } else {
+      fetchData();
     }
 
     return () => {
