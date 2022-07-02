@@ -41,7 +41,7 @@ function RenTab(props) {
     setLoading(true);
     let url = MassURL;
     const result = await axios.get(url);
-    // console.log("result.data", result.data);
+      console.log("result.data", result.data);
 
     // add new element to array of objects
     (result.data).forEach(element => element.sum = (result.data).length);
@@ -66,14 +66,16 @@ function RenTab(props) {
 
     // console.log('effect ran');
 
-    if(effectRan.current === false) {
+    if(effectRan.current === true) {
       fetchData();
       // Clean up component
-      return () => {
-        // console.log('cleaned up');
-        effectRan.current = true;
-      };
+      
     }
+
+    return () => {
+      // console.log('cleaned up');
+      effectRan.current = true;
+    };
       
   }, [fetchData]);
 
