@@ -27,9 +27,9 @@ return (
 						)
 					}}
 				/> */}
-				<Route exact path="/" element={<Navigate to="/table/2022"> </Navigate>} />
+				<Route exact path="/" element={<Navigate to="/table/2022" replace={true}> </Navigate>} />
 
-				  <Route
+				  <Route exact
 						path='table/:id'
 						element={(
 						<IdGuardWrapper> 
