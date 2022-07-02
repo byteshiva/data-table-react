@@ -38,6 +38,7 @@ function RenTab(props) {
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
 
   const fetchData  = useCallback(async () => {
+    console.log('Fetching data...');
     setLoading(true);
     let url = MassURL;
     const result = await axios.get(url);
@@ -64,6 +65,7 @@ function RenTab(props) {
 
   useEffect(() => {
 
+    console.log("Started use Effect");
     
 
     if(effectRan.current === true) {
