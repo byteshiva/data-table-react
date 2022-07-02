@@ -41,7 +41,7 @@ function RenTab(props) {
     setLoading(true);
     let url = MassURL;
     const result = await axios.get(url);
-      console.log("result.data", result.data);
+      // console.log("result.data", result.data);
 
     // add new element to array of objects
     (result.data).forEach(element => element.sum = (result.data).length);
