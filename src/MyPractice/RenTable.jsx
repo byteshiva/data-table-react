@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { useTable, usePagination } from 'react-table';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import StateUSA_ACR from './states_hash.json'
 import moment from "moment";
@@ -9,6 +9,7 @@ import {useParams} from "react-router-dom";
 
 function RenTab(props) {
   const { id } = useParams();
+  const effectRan = useRef(false);
   const defaultURL = "https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/"+id+"-data.json";
 
   // const MassURL = props.URL || "https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json";
@@ -40,7 +41,7 @@ function RenTab(props) {
     setLoading(true);
     let url = MassURL;
     const result = await axios.get(url);
-    console.log("result.data", result.data);
+    // console.log("result.data", result.data);
 
     // add new element to array of objects
     (result.data).forEach(element => element.sum = (result.data).length);
@@ -62,12 +63,18 @@ function RenTab(props) {
   }, [MassURL]);
 
   useEffect(() => {
-    fetchData();
-    // Clean up component
-    return () => {
-      // console.log('cleaned up');
-    };
-  
+
+    // console.log('effect ran');
+
+    if(effectRan.current === false) {
+      fetchData();
+      // Clean up component
+      return () => {
+        // console.log('cleaned up');
+        effectRan.current = true;
+      };
+    }
+      
   }, [fetchData]);
 
   const data = React.useMemo(
