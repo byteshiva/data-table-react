@@ -19,7 +19,7 @@ export const Container = styled.div`
 	justify-content: center;
 	max-width: 1000px;
 	margin: 0 auto;
-	/* background: red; */
+	// background: skygreen;
 `
 
 export const Column = styled.div`

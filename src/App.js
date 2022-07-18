@@ -8,7 +8,9 @@ import Teams from './pages/Teams';
 import Support from './pages/Support';
 import Messages from './pages/Messages';
 import NoMatch from './pages/NoMatch';
+import Dashboard from './pages/Dashboard';
 import { IdGuardWrapper } from './pages/IdGuardWrapper';
+import Footer from './components/Footer';
 
 function App() {
 return (
@@ -36,7 +38,7 @@ return (
 						</IdGuardWrapper>
 						)}
   				/>
-
+				<Route path="/dashboard" element={<Dashboard />} />
 				<Route path="/products" element={<Products />} />
 				<Route path="/reports" element={<Reports />} />
 				{/* <Route path="/table/:id" element={ <Main />} /> */}

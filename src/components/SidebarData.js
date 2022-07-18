@@ -6,6 +6,12 @@ import * as IoIcons from "react-icons/io";
 
 
 export const SidebarData = [
+   { 
+        title: 'Dasboard',
+        path: '/dashboard',
+        icon: <FaIcons.FaDashcube />,
+        cName: 'nav-text'
+    },
     {
         title: 'Home',
         path: '/',
@@ -47,5 +53,5 @@ export const SidebarData = [
         path: '/support',
         icon: <IoIcons.IoMdHelpCircle />,
         cName: 'nav-text'
-    }         
+    }
 ]
