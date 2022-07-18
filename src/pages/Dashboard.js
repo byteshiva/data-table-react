@@ -1,15 +1,19 @@
 import React from 'react'
 import './dashboard.css'
 
+import {
+  Link,
+} from 'react-router-dom';
+
 const Dashboard = () => {
   return (
     <>
 
     <ul class="navigation">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><Link to="/public">Home</Link></li>
+        <li><Link to="/about">About</Link></li>
+        <li><Link to="/products">Products</Link></li>
+        <li><Link to="/contact">Contact</Link></li>
     </ul>
 
 

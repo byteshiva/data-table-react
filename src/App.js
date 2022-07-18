@@ -10,7 +10,7 @@ import Messages from './pages/Messages';
 import NoMatch from './pages/NoMatch';
 import Dashboard from './pages/Dashboard';
 import { IdGuardWrapper } from './pages/IdGuardWrapper';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 
 function App() {
 return (
