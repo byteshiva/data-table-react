@@ -29,7 +29,7 @@ return (
 						)
 					}}
 				/> */}
-				<Route exact path="/" element={<Navigate to="/table/2022" replace={true}> </Navigate>} />
+				<Route exact path="/" element={<Navigate to="/table/2023" replace={true}> </Navigate>} />
 
 				  <Route exact
 						path='table/:id'
