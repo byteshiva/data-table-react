@@ -33,6 +33,16 @@ function RenTab(props) {
 
     return arr.reduce(reduction, []);
   }
+  
+  function findAllElements(row) {
+    let charlen = (row.state).length;
+    // arr.filter(arr => (arr.state).toLowerCase() == "Utah".toLowerCase() )[0].state  
+    if (charlen > 2) {
+      return row.state
+    }
+    
+    return  StateUSA_ACR[row.state]
+  }
 
   const convertToInt = (arr) => arr.map((x) => parseInt(x, 10));
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
@@ -101,7 +111,7 @@ function RenTab(props) {
       },
       {
         Header: 'Location',
-        accessor: row => row.city + ", " + StateUSA_ACR[row.state]
+        accessor: row => row.city + ", " + findAllElements(row)
       },
       {
         'Header': 'Shooter Names',
