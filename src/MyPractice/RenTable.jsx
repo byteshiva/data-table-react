@@ -44,25 +44,16 @@ function RenTab(props) {
     return  StateUSA_ACR[row.state]
   }
 
-  function createTextAndMapsRemoverFactory() {
+  function removeTextFromLink(link) {
     const textRegex = /\(([^)]+)\)/g;
-    const mapsRegex = /(\([^)]+\))/g;
-    return {
-      createTextRemover: function() {
-        return function(text) {
-          return text.replace(textRegex, '');
-        };
-      },
-      createMapsRemover: function() {
-        return function(link) {
-          return link.replace(mapsRegex, '');
-        };
-      }
-    };
+    return link.replace(textRegex, '');
   }
-
-  const removerFactory = createTextAndMapsRemoverFactory();
   
+  function removeMapsFromLink(link) {
+    const mapsRegex = /(\([^)]+\))/g;
+    return link.replace(mapsRegex, '');
+  }
+    
   const convertToInt = (arr) => arr.map((x) => parseInt(x, 10));
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
 
@@ -157,11 +148,11 @@ function RenTab(props) {
         accessor: row => {
           const googleurl = "https://www.google.com/maps/place/";
           const mapurldata = googleurl + row.city + ",+" + row.state + ",+USA";
-          return (<a href={removerFactory.createMapsRemover()(mapurldata)} target="_blank" rel="noreferrer">{StateUSA_ACR[row.state]} - {removerFactory.createTextRemover()(row.city)}</a>)
+          return (<a href={removeMapsFromLink(mapurldata)} target="_blank" rel="noreferrer">{StateUSA_ACR[row.state]} - {removeTextFromLink(row.city)}</a>)
         }
       }
     ],
-    [removerFactory]
+    []
   );
 
   const {
