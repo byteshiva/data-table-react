@@ -161,7 +161,7 @@ function RenTab(props) {
         }
       }
     ],
-    []
+    [removerFactory]
   );
 
   const {
