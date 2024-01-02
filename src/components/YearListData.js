@@ -1,5 +1,9 @@
 export const YearListData = () => {
-    const a = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024];
-    return a;
-  
+  const currentYear = new Date().getFullYear();
+  const startYear = 2013;
+
+  // Generate an array from startYear to currentYear
+  const yearList = Array.from({ length: currentYear - startYear + 1 }, (_, index) => startYear + index);
+
+  return yearList;
 };
