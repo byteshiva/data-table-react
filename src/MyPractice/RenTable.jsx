@@ -1,169 +1,119 @@
-import React, { useCallback } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useTable, usePagination } from 'react-table';
-import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import StateUSA_ACR from './states_hash.json'
 import moment from "moment";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
+import StateUSA_ACR from './states_hash.json';
 
-
-function RenTab(props) {
+const RenTab = (props) => {
   const { id } = useParams();
-  const effectRan = useRef(false);
-  const defaultURL = "https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/"+id+"-data.json";
-
-  // const MassURL = props.URL || "https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/2022-data.json";
-  const MassURL = props.URL || defaultURL;
+  // const effectRan = useRef(false);
+  const MassURL = props.URL || `https://mass-shooting-tracker-data.s3.us-east-2.amazonaws.com/${id}-data.json`;
 
   const [mass, setMass] = useState([]);
   const [sumkilled, setSumKilled] = useState(0);
   const [sumwounded, setSumWounded] = useState(0);
-  const [Loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
+  const ShooterNames = (data) => data.map(shooter => shooter).join(', ');
 
-  const ShooterNames = (data) => data.reduce(function (accumulator, currentValue) {
-    return accumulator + currentValue;
-  });
+  const extractColumn = (arr, column) => arr.map(row => row[column]);
 
-  function extractColumn(arr, column) {
-    function reduction(previousValue, currentValue) {
-      previousValue.push(currentValue[column]);
-      return previousValue;
-    }
+  const findAllElements = (row) => (row.state.length > 2) ? row.state : StateUSA_ACR[row.state];
 
-    return arr.reduce(reduction, []);
-  }
-  
-  function findAllElements(row) {
-    let charlen = (row.state).length;
-    // arr.filter(arr => (arr.state).toLowerCase() == "Utah".toLowerCase() )[0].state  
-    if (charlen > 2) {
-      return row.state
-    }
-    
-    return  StateUSA_ACR[row.state]
-  }
+  const removeTextFromLink = (link) => link.replace(/\(([^)]+)\)/g, '');
 
-  function removeTextFromLink(link) {
-    const textRegex = /\(([^)]+)\)/g;
-    return link.replace(textRegex, '');
-  }
-  
-  function removeMapsFromLink(link) {
-    const mapsRegex = /(\([^)]+\))/g;
-    return link.replace(mapsRegex, '');
-  }
-    
-  const convertToInt = (arr) => arr.map((x) => parseInt(x, 10));
+  const removeMapsFromLink = (link) => link.replace(/(\([^)]+\))/g, '');
+
+  const convertToInt = (arr) => arr.map(x => parseInt(x, 10));
+
   const sumOfAllNum = (arr) => arr.reduce((sum, value) => sum + value, 0);
 
-  const fetchData  = useCallback(async () => {
+  const fetchData = useCallback(async () => {
     console.log('Fetching data...');
     setLoading(true);
-    let url = MassURL;
-    const result = await axios.get(url);
-      console.log("result.data", result.data);
+    const result = await axios.get(MassURL);
+    console.log("result.data", result.data);
 
     // add new element to array of objects
-    (result.data).forEach(element => element.sum = (result.data).length);
+    result.data.forEach(element => element.sum = result.data.length);
 
     const killedArr = extractColumn(result.data, 'killed');
     const woundedArr = extractColumn(result.data, 'wounded');
 
-    var killedIntArr = convertToInt(killedArr);
-    var woundedIntArr = convertToInt(woundedArr);
-
-    let killedSum = sumOfAllNum(killedIntArr);
-    let woundedSum = sumOfAllNum(woundedIntArr);
+    let killedSum = sumOfAllNum(convertToInt(killedArr));
+    let woundedSum = sumOfAllNum(convertToInt(woundedArr));
 
     setSumKilled(killedSum);
     setSumWounded(woundedSum);
     setMass(result.data);
     setLoading(false);
-
   }, [MassURL]);
 
   useEffect(() => {
-
     console.log("Started use Effect");
-    
-
-    if(effectRan.current === true) {
-      console.log("effect ran");
-      fetchData();
-      // Clean up component
-      
-    } else {
-      fetchData();
-    }
+    fetchData();
 
     return () => {
       console.log('cleaned up');
-      effectRan.current = true;
     };
-      
   }, [fetchData]);
 
-  const data = React.useMemo(
-    () => mass,
-    [mass]
-  );
+  const data = useMemo(() => mass, [mass]);
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: '#',
-        accessor: (row, index) => { return (row.sum - index) },
-      },
-      {
-        Header: 'Date',
-        accessor: row => moment(row.date).format('MM/DD/YYYY')
-      },
-      {
-        Header: 'Location',
-        accessor: row => row.city + ", " + findAllElements(row)
-      },
-      {
-        'Header': 'Shooter Names',
-        'accessor': row => {return (<div style={{textAlign:'left'}}> {ShooterNames(row.names)} </div>)}
-      },
-      {
-        Header: 'Sources',
-        accessor: row => row.sources.map((source, index) => {
-          return (<span key={'a' + index + 1}>
-            <span>  <a href={source} target="_blank" rel="noreferrer" id={index + 1} >{index + 1}</a></span>
-          </span>)
-        })
-      },
-      {
-        Header: 'Killed',
-        accessor: 'killed'
-      },
-      {
-        Header: 'Wounded',
-        accessor: row => row.wounded
-      },
-      {
-        Header: 'Map',
-        accessor: row => {
-          const googleurl = "https://www.google.com/maps/place/";
-          const mapurldata = googleurl + row.city + ",+" + row.state + ",+USA";
-          return (<a href={removeMapsFromLink(mapurldata)} target="_blank" rel="noreferrer">{StateUSA_ACR[row.state]} - {removeTextFromLink(row.city)}</a>)
-        }
+  const columns = useMemo(() => [
+    {
+      Header: '#',
+      accessor: (row, index) => row.sum - index,
+    },
+    {
+      Header: 'Date',
+      accessor: row => moment(row.date).format('MM/DD/YYYY')
+    },
+    {
+      Header: 'Location',
+      accessor: row => `${row.city}, ${findAllElements(row)}`
+    },
+    {
+      'Header': 'Shooter Names',
+      'accessor': row => <div style={{ textAlign: 'left' }}>{ShooterNames(row.names)}</div>,
+    },
+    {
+      Header: 'Sources',
+      accessor: row => row.sources.map((source, index) => (
+        <span key={`a${index + 1}`}>
+          <span> <a href={source} target="_blank" rel="noreferrer" id={index + 1}>{index + 1}</a></span>
+        </span>
+      ))
+    },
+    {
+      Header: 'Killed',
+      accessor: 'killed'
+    },
+    {
+      Header: 'Wounded',
+      accessor: row => row.wounded
+    },
+    {
+      Header: 'Map',
+      accessor: row => {
+        const googleurl = "https://www.google.com/maps/place/";
+        const mapurldata = `${googleurl}${row.city},+${row.state},+USA`;
+        return (
+          <a href={removeMapsFromLink(mapurldata)} target="_blank" rel="noreferrer">
+            {StateUSA_ACR[row.state]} - {removeTextFromLink(row.city)}
+          </a>
+        );
       }
-    ],
-    []
-  );
+    },
+  ], []);
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    page, // Instead of using 'rows', we'll use page,
-    // which has only the rows for the active page
-
-    // The rest of these things are super handy, too ;)
+    page,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -180,44 +130,44 @@ function RenTab(props) {
       initialState: { pageIndex: 0 },
     },
     usePagination
-  )
+  );
 
   return (
     <div>
-      <div style={{justifyContent:"center", display: "flex"}}>
-        <h1>Mass Shooting Tracker - USA</h1>
-      </div>
-      {Loading && <div><h4>Loading data, Please wait...</h4></div>}
+      <header style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50px" }}>
+        <h2 style={{ margin: 0 }}>Community Safety Awareness - USA Mass Shooting Tracker</h2>
+      </header>
+      {loading && <div><h4>Loading data, Please wait...</h4></div>}
 
-      {!Loading && <div>
-        <div ><h2>Year: {id} ->  Total Killed: {sumkilled} and Injured: {sumwounded}</h2></div>
-        <table {...getTableProps()} style={{ border: 'solid 2px skyblue', marginLeft: 'auto', marginRight:'auto' }}>
-          <thead>
-            {headerGroups.map(headerGroup => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map(column => (
-                  <th
-                    {...column.getHeaderProps()}
-                    style={{
-                      borderBottom: 'solid 3px red',
-                      background: '#FFB500',
-                      color: 'black',
-                      fontWeight: 'bold',
-                    }}
-                  >
-                    {column.render('Header')}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map(row => {
-              prepareRow(row)
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return (
+      {!loading && (
+        <div>
+          <div><h2>Year: {id} ->  Total Killed: {sumkilled} and Injured: {sumwounded}</h2></div>
+          <table {...getTableProps()} style={{ border: 'solid 2px skyblue', marginLeft: 'auto', marginRight: 'auto' }}>
+            <thead>
+              {headerGroups.map(headerGroup => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map(column => (
+                    <th
+                      {...column.getHeaderProps()}
+                      style={{
+                        borderBottom: 'solid 3px red',
+                        background: '#FFB500',
+                        color: 'black',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      {column.render('Header')}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map(row => {
+                prepareRow(row)
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map(cell => (
                       <td
                         {...cell.getCellProps()}
                         style={{
@@ -228,64 +178,62 @@ function RenTab(props) {
                       >
                         {cell.render('Cell')}
                       </td>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+                    ))}
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
 
-        <div className="pagination">
-          <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-            {'<<'}
-          </button>{' '}
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>{' '}
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>{' '}
-          <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-            {'>>'}
-          </button>{' '}
-          <span>
-            Page{' '}
-            <strong>
-              {pageIndex + 1} of {pageOptions.length}
-            </strong>{' '}
-          </span>
-          <span>
-            | Go to page:{' '}
-            <input
-              type="number"
-              defaultValue={pageIndex + 1}
+          <div className="pagination">
+            <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+              {'<<'}
+            </button>{' '}
+            <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+              {'<'}
+            </button>{' '}
+            <button onClick={() => nextPage()} disabled={!canNextPage}>
+              {'>'}
+            </button>{' '}
+            <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+              {'>>'}
+            </button>{' '}
+            <span>
+              Page{' '}
+              <strong>
+                {pageIndex + 1} of {pageOptions.length}
+              </strong>{' '}
+            </span>
+            <span>
+              | Go to page:{' '}
+              <input
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={e => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0
+                  gotoPage(page)
+                }}
+                style={{ width: '100px' }}
+              />
+            </span>{' '}
+            <select
+              value={pageSize}
               onChange={e => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                gotoPage(page)
+                setPageSize(Number(e.target.value))
               }}
-              style={{ width: '100px' }}
-            />
-          </span>{' '}
-          <select
-            value={pageSize}
-            onChange={e => {
-              setPageSize(Number(e.target.value))
-            }}
-          >
-            {[10, 20, 30, 40, 50].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </select>
+            >
+              {[10, 20, 30, 40, 50].map(pageSize => (
+                <option key={pageSize} value={pageSize}>
+                  Show {pageSize}
+                </option>
+              ))}
+            </select>
+          </div>
+
         </div>
-
-      </div>}
-
+      )}
     </div>
-  )
+  );
 }
-
 
 export default RenTab;

@@ -1,0 +1,56 @@
+/* HeaderLinks.css */
+  
+  .year-dropdown {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+  
+  /* Style for the dropdown arrow */
+  .year-dropdown::after {
+    content: '\25BC'; /* Unicode character for down arrow */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+  }
+  
+  /* Style for dropdown options */
+  .year-dropdown option {
+    background-color: #fff;
+    color: #333;
+  }
+  
+  /* Optional: Style for when the dropdown is open */
+  .year-dropdown:focus {
+    outline: none;
+    border-color: #007bff; /* Example color when focused */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Example shadow when focused */
+  }
+
+/* HeaderLinks.css */
+#header-strip {
+    display: flex;
+    align-items: center;
+  }
+  
+  .year-label {
+    margin-right: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+    color: #333;
+    background-color: #e0e0e0; /* Background color for the label */
+    padding: 5px;
+    border-radius: 5px; /* Rounded corners */
+  }
+  
+  .year-dropdown {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    color: #555;
+  }
+  

@@ -1,25 +1,36 @@
-import { Link } from "react-router-dom";
-import {YearListData } from "./YearListData";
+// HeaderLinks.js
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { YearListData } from './YearListData';
+import './HeaderLinks.css';
 
-
-const a = YearListData();
 const HeaderLinks = () => {
+  const navigate = useNavigate();
+  const years = YearListData();
+  const [selectedYear, setSelectedYear] = useState('');
+
+  const handleYearChange = (event) => {
+    const selectedYear = event.target.value;
+    setSelectedYear(selectedYear);
+    navigate(`/table/${selectedYear}`);
+  };
+
   return (
     <section id="header-strip">
-    <div className="test"><h3>Select the year: </h3></div>
-    <ul>
-      {a.map(i => {
-        return (
-          <li key={i+"header"} className="crum-menu">
-          <Link to={"/table/" + i}>
-            {i}
-          </Link>
-          </li>
-        );
-      })}
-    </ul>
+      <label className="year-label">Select the year:</label>
+
+      <select className="year-dropdown" value={selectedYear} onChange={handleYearChange}>
+        <option value="" disabled>
+          Select a year
+        </option>
+        {years.map((year) => (
+          <option key={year} value={year}>
+            {year}
+          </option>
+        ))}
+      </select>
     </section>
   );
 };
 
-export default HeaderLinks; 
+export default HeaderLinks;
