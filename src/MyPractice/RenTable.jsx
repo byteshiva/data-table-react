@@ -134,7 +134,7 @@ const RenTab = (props) => {
 
   return (
     <div>
-      <header style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50px" }}>
+      <header style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "50px", marginTop: "15px" }}>
         <h2 style={{ margin: 0 }}>Community Safety Awareness - USA Mass Shooting Tracker</h2>
       </header>
       {loading && <div><h4>Loading data, Please wait...</h4></div>}

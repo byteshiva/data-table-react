@@ -33,6 +33,7 @@
 /* HeaderLinks.css */
 #header-strip {
     display: flex;
+    margin-top: 10px;
     align-items: center;
   }
   
